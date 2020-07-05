@@ -9,22 +9,27 @@ public class Ship : MonoBehaviour
 {
     Rigidbody2D rb;
     SpriteRenderer sr;
+    public ParticleSystem particle;
     public Sprite freeFallSprite;
     public Sprite impulseSprite;
     public Sprite destroyedSprite;
 
-    float initialForce = 200;
     public float impulseForce;
     public float rotationSpeed;
     public float gravityScale;
     public Vector2Int registredSpeed;
     public float maxLandingSpeed;
     public int altitude;
+    public float score;
+    public float fuel;
+
+    const float initialForce = 200;
     const int spriteOffset = 4;
     Vector3 lastPos;
     Vector3 distanceInFrames;
     float rayDistance = 100;
     RaycastHit2D hit;
+    
     enum ShipStates
     {
         impulse,
@@ -36,8 +41,10 @@ public class Ship : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        rb.AddForce(transform.right * initialForce);
+        InitialImpulse();
+        particle.Stop();
     }
+
     private void Update()
     {
         if (rb.gravityScale != gravityScale) rb.gravityScale = gravityScale;
@@ -63,7 +70,6 @@ public class Ship : MonoBehaviour
         lastPos = transform.position;
         registredSpeed.x = (int)(distanceInFrames.x * 1000);
         registredSpeed.y = (int)(distanceInFrames.y * 1000);
-        Debug.Log(Math.Abs(registredSpeed.x) + Math.Abs(registredSpeed.y));
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -72,6 +78,10 @@ public class Ship : MonoBehaviour
             SpriteState = ShipStates.destroyed;
             ChangeSprite();
         }
+    }
+    void InitialImpulse()
+    {
+        rb.AddForce(Vector2.right * initialForce);
     }
     void Impulse()
     {
@@ -88,16 +98,32 @@ public class Ship : MonoBehaviour
         {
             case ShipStates.freeFall:
                 sr.sprite = freeFallSprite;
+                if (particle.isPlaying) particle.Stop();
                 break;
             case ShipStates.impulse:
                 sr.sprite = impulseSprite;
+                if (!particle.isEmitting) particle.Play();
                 break;
             case ShipStates.destroyed:
                 sr.sprite = destroyedSprite;
+                if (particle.isPlaying) particle.Stop();
                 break;
             default:
                 break;
         }
+    }
+
+    public void OnLevelChange(Vector3 initialPos)
+    {
+        transform.position = initialPos;
+        transform.rotation = Quaternion.identity;
+        rb.velocity = Vector3.zero;
+        if (SpriteState != ShipStates.freeFall)
+        {
+            SpriteState = ShipStates.freeFall;
+            ChangeSprite();
+        }
+        InitialImpulse();
     }
 
 }
