@@ -22,21 +22,29 @@ public class Ship : MonoBehaviour
     public int altitude;
     public float score;
     public float fuel;
-
+    public float landingAltitude;
+    bool onLandingAltitude = false;
+    const float fuelLosingSpeed = 15;
     const float initialForce = 200;
     const int spriteOffset = 4;
     Vector3 lastPos;
     Vector3 distanceInFrames;
     float rayDistance = 100;
     RaycastHit2D hit;
+    bool ableToMove = true;
+    bool displayingResults = false;
     
+    public Action ChangeLevel;
+    public Action<float> EndGame;
+    public Action<bool> ShowLandResultScreen;
+    public Action<bool> SetCameraZoom;
     enum ShipStates
     {
         impulse,
         freeFall,
         destroyed
     }
-    ShipStates SpriteState = ShipStates.freeFall;
+    ShipStates ShipState = ShipStates.freeFall;
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -48,21 +56,30 @@ public class Ship : MonoBehaviour
     private void Update()
     {
         if (rb.gravityScale != gravityScale) rb.gravityScale = gravityScale;
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && ableToMove)
         {
             Impulse();
         }
-        else if (SpriteState == ShipStates.impulse)
+        else if (ShipState == ShipStates.impulse)
         {
-            SpriteState = ShipStates.freeFall;
+            ShipState = ShipStates.freeFall;
             ChangeSprite();
         }
         float rotate = -Input.GetAxisRaw("Horizontal");
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0, 0, rotate * Time.deltaTime * rotationSpeed));
-
+        if (ableToMove) transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0, 0, rotate * Time.deltaTime * rotationSpeed));
         hit = Physics2D.Raycast(transform.position, Vector2.down, rayDistance);
         if (hit.collider!=null) altitude = (int)(hit.distance * 10) - spriteOffset;
         if (altitude < 0) altitude = 0;
+        if (onLandingAltitude && altitude > landingAltitude)
+        {
+            SetCameraZoom(false);
+            onLandingAltitude = false;
+        }
+        else if (!onLandingAltitude && altitude < landingAltitude)
+        {
+            SetCameraZoom(true);
+            onLandingAltitude = true;
+        }
     }
     private void FixedUpdate()
     {
@@ -73,10 +90,34 @@ public class Ship : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (Math.Abs(registredSpeed.x) + Math.Abs(registredSpeed.y) > maxLandingSpeed)
+        if (collision.gameObject.CompareTag("Stage") && !displayingResults)
         {
-            SpriteState = ShipStates.destroyed;
-            ChangeSprite();
+            if (ShipState != ShipStates.destroyed)
+            {
+
+                OnCrash();
+                StartCoroutine(TimeInLandResultScreen());
+            }
+        }
+        if (collision.gameObject.CompareTag("LandingPlatform") && !displayingResults)
+        {
+            if ((Math.Abs(registredSpeed.x) + Math.Abs(registredSpeed.y) <= maxLandingSpeed))
+            {
+                ShowLandResultScreen(true);
+                score += 50;
+            }
+            else
+            {
+                OnCrash();
+            }
+            StartCoroutine(TimeInLandResultScreen());
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("LevelLimit"))
+        {
+            transform.position = new Vector3(collision.gameObject.GetComponent<LevelLimit>().xToTeleportShipTo, transform.position.y, transform.position.z);
         }
     }
     void InitialImpulse()
@@ -86,15 +127,21 @@ public class Ship : MonoBehaviour
     void Impulse()
     {
         rb.AddForce(transform.up * impulseForce);
-        if (SpriteState != ShipStates.impulse)
+        if (fuel > 0)
         {
-            SpriteState = ShipStates.impulse;
+            fuel -= Time.deltaTime * fuelLosingSpeed;
+            if (fuel < 0) fuel = 0;
+        }
+        if (fuel == 0) ableToMove = false;
+        if (ShipState != ShipStates.impulse)
+        {
+            ShipState = ShipStates.impulse;
             ChangeSprite();
         }
     }
     void ChangeSprite()
     {
-        switch (SpriteState)
+        switch (ShipState)
         {
             case ShipStates.freeFall:
                 sr.sprite = freeFallSprite;
@@ -112,18 +159,42 @@ public class Ship : MonoBehaviour
                 break;
         }
     }
-
     public void OnLevelChange(Vector3 initialPos)
     {
         transform.position = initialPos;
         transform.rotation = Quaternion.identity;
         rb.velocity = Vector3.zero;
-        if (SpriteState != ShipStates.freeFall)
+        if (ShipState != ShipStates.freeFall)
         {
-            SpriteState = ShipStates.freeFall;
+            ShipState = ShipStates.freeFall;
             ChangeSprite();
         }
         InitialImpulse();
     }
 
+    IEnumerator TimeInLandResultScreen()
+    {
+        ableToMove = false;
+        displayingResults = true;
+        yield return new WaitForSeconds(5);
+        if (fuel <= 0)
+        {
+            EndGame(score);
+        }
+        else ChangeLevel();
+        ableToMove = true;
+        displayingResults = false;
+    }
+
+    void OnCrash()
+    {
+        if (fuel > 0)
+        {
+            fuel -= 200;
+            if (fuel < 0) fuel = 0;
+        }
+        ShipState = ShipStates.destroyed;
+        ChangeSprite();
+        ShowLandResultScreen(false);
+    }
 }
