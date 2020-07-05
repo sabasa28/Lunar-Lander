@@ -7,7 +7,7 @@ public class UIMainMenu : MonoBehaviour
 {
     public void SwapToGameplayScene()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 
 }

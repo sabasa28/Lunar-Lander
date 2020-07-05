@@ -58,7 +58,7 @@ public class GameplayController : MonoBehaviour
     void PauseGame()
     {
         Time.timeScale = 0;
-        SceneManager.LoadScene(3, LoadSceneMode.Additive);
+        SceneManager.LoadScene(4, LoadSceneMode.Additive);
     }
     IEnumerator LevelTimer()
     {
@@ -84,6 +84,6 @@ public class GameplayController : MonoBehaviour
 
     void LoadEndscreen(float score)
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(3);
     }
 }

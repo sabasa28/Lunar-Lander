@@ -7,10 +7,10 @@ public class UIEndscreen : MonoBehaviour
 {
     public void SwapToMainMenuScene()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
     public void SwapToGameplayScene()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 }

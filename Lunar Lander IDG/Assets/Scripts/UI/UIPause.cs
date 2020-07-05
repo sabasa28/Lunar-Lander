@@ -7,12 +7,12 @@ public class UIPause : MonoBehaviour
 {
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
         Time.timeScale = 1;
     }
     public void ResumeGameplay()
     {
-        SceneManager.UnloadSceneAsync(3);
+        SceneManager.UnloadSceneAsync(4);
         Time.timeScale = 1;
     }
 }
