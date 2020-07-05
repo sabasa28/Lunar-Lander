@@ -84,6 +84,7 @@ public class GameplayController : MonoBehaviour
 
     void LoadEndscreen(float score)
     {
+        GameManager.Get().SetScore(score);
         SceneManager.LoadScene(3);
     }
 }
