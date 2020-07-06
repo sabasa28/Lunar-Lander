@@ -37,7 +37,7 @@ public class GameplayController : MonoBehaviour
         ship.ChangeLevel = ChangeLevel;
         ship.EndGame = LoadEndscreen;
         gameplayCamera.UpdateLevelData(lvl1.limitXmin, lvl1.limitXmax);
-        gameplayHUD.getlevelTimer = passLevelTimer;
+        gameplayHUD.getlevelTimer = PassLevelTimer;
         gameplayHUD.PauseGame = PauseGame;
     }
     void InitializeLevels()
@@ -77,14 +77,14 @@ public class GameplayController : MonoBehaviour
         gameplayCamera.UpdateLevelData(level[currentLvl].limitXmin, level[currentLvl].limitXmax);
     }
 
-    float passLevelTimer()
+    float PassLevelTimer()
     {
         return timeInLvl;
     }
 
     void LoadEndscreen(float score)
     {
-        GameManager.Get().SetScore(score);
+        GameManager.Get().SetScore(score);  //Tirar un evento al GameManager y que el tome el score de aca sino
         SceneManager.LoadScene(3);
     }
 }

@@ -12,12 +12,12 @@ Endscreen 10m
 Game Flow 30m
 
 Tiempo Final:
-Nave 1,5h
-Mapa 1,5h
-Camara 30m
+Nave 2h
+Mapa 2h
+Camara 40m
 SplashScreens 5m
 Pantalla de aterrizaje 10 m
 Menu (con highscore) 10m pero sin highscore
 ingameHUD 45m
 Endscreen 5m
-Game Flow 30m
+Game Flow 1h

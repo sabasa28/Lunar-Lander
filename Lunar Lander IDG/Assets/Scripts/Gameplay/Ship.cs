@@ -92,12 +92,8 @@ public class Ship : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Stage") && !displayingResults)
         {
-            if (ShipState != ShipStates.destroyed)
-            {
-
-                OnCrash();
-                StartCoroutine(TimeInLandResultScreen());
-            }
+            OnCrash();
+            StartCoroutine(TimeInLandResultScreen());
         }
         if (collision.gameObject.CompareTag("LandingPlatform") && !displayingResults)
         {
@@ -164,6 +160,7 @@ public class Ship : MonoBehaviour
         transform.position = initialPos;
         transform.rotation = Quaternion.identity;
         rb.velocity = Vector3.zero;
+        rb.angularDrag = 0.0f;
         if (ShipState != ShipStates.freeFall)
         {
             ShipState = ShipStates.freeFall;
