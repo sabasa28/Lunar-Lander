@@ -19,10 +19,10 @@ public class Ship : MonoBehaviour
     public Vector2Int registredSpeed;
     public float maxLandingSpeed;
     public int altitude;
-    public float score;
+    public int score;
     public float fuel;
     public float landingAltitude;
-    public float baseScorePerLanding;
+    public int baseScorePerLanding;
     public float currentScoreMultiplier;
     bool onLandingAltitude = false;
     const float fuelLosingSpeed = 15;
@@ -37,7 +37,7 @@ public class Ship : MonoBehaviour
     bool displayingResults = false;
     
     public Action ChangeLevel;
-    public Action<float> EndGame;
+    public Action<int> EndGame;
     public Action<bool> ShowLandResultScreen;
     public Action ShowResultCheckScreen;
     public Action<bool> SetCameraZoom;
@@ -194,7 +194,6 @@ public class Ship : MonoBehaviour
     {
         ShowResultCheckScreen();
         OnResultsScreenEnter();
-        ableToMove = false;
         float timer = 0;
         bool correctLanding = true;
         while (timer < 3 && correctLanding)
@@ -227,6 +226,6 @@ public class Ship : MonoBehaviour
     void OnLanding()
     {
         ShowLandResultScreen(true);
-        score += baseScorePerLanding * currentScoreMultiplier;
+        score += baseScorePerLanding * (int)currentScoreMultiplier;
     }
 }

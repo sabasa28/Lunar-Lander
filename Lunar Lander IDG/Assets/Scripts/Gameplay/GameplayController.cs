@@ -82,9 +82,9 @@ public class GameplayController : MonoBehaviour
         return timeInLvl;
     }
 
-    void LoadEndscreen(float score)
+    void LoadEndscreen(int score)
     {
-        GameManager.Get().SetScore(score);  //Tirar un evento al GameManager y que el tome el score de aca sino
+        GameManager.Get().SetScore(score);
         SceneManager.LoadScene(3);
     }
 }
