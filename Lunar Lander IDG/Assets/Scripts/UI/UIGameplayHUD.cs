@@ -9,6 +9,7 @@ public class UIGameplayHUD : MonoBehaviour
     public List<TextMeshProUGUI> gameInfo=new List<TextMeshProUGUI>();
     public TextMeshProUGUI crashText;
     public TextMeshProUGUI landText;
+    public TextMeshProUGUI checkText;
     public delegate float GetFloat();
     public GetFloat getlevelTimer;
     public Action PauseGame;
@@ -23,6 +24,7 @@ public class UIGameplayHUD : MonoBehaviour
     {
         ship = FindObjectOfType<Ship>();
         ship.ShowLandResultScreen = StartLandingResultScreen;
+        ship.ShowResultCheckScreen = ShowResultCheckingScreen;
     }
     void Update()
     {
@@ -47,21 +49,29 @@ public class UIGameplayHUD : MonoBehaviour
     void StartLandingResultScreen(bool landed)
     {
         if (landed)
-            StartCoroutine(showLandScreen());
+            StartCoroutine(ShowLandScreen());
         else
-            StartCoroutine(showCrashScreen());
+            StartCoroutine(ShowCrashScreen());
 
     }
-    IEnumerator showCrashScreen()
+    void ShowResultCheckingScreen()
     {
+        checkText.gameObject.SetActive(true);
+    }
+    IEnumerator ShowCrashScreen()
+    {
+        if (checkText.IsActive()) checkText.gameObject.SetActive(false);
         crashText.gameObject.SetActive(true);
         yield return new WaitForSeconds(timeForLandResultScreen);
         crashText.gameObject.SetActive(false);
+        ship.OnResultsScreenExit();
     }
-    IEnumerator showLandScreen()
+    IEnumerator ShowLandScreen()
     {
+        checkText.gameObject.SetActive(false);
         landText.gameObject.SetActive(true);
         yield return new WaitForSeconds(timeForLandResultScreen);
         landText.gameObject.SetActive(false);
+        ship.OnResultsScreenExit();
     }
 }
