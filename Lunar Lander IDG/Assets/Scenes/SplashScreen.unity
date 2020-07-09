@@ -186,8 +186,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -468,7 +468,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -551,7 +551,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1191085959
 RectTransform:
   m_ObjectHideFlags: 0
@@ -671,7 +671,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1511403734
 RectTransform:
   m_ObjectHideFlags: 0
@@ -806,8 +806,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6b58f17f6e73644836689938684874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  splashScreen1: {fileID: 1511403733}
-  splashScreen2: {fileID: 1191085958}
+  textSplashScreen1: {fileID: 1700262747}
+  imageSplashScreen1: {fileID: 1022023379}
+  textSplashScreen2: {fileID: 578205203}
+  imageSplashScreen2: {fileID: 891358800}
 --- !u!1 &1700262745
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,8 +876,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294927872
-  m_fontColor: {r: 0, g: 0.40291238, b: 1, a: 1}
+    rgba: 16737792
+  m_fontColor: {r: 0, g: 0.40291238, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

@@ -8,26 +8,91 @@ using UnityEngine.UI;
 
 public class UISplashScreen : MonoBehaviour
 {
-    public GameObject splashScreen1;
-    public GameObject splashScreen2;
-    float timeBetweenScreens = 2.0f;
+    public TextMeshProUGUI textSplashScreen1;
+    public Image imageSplashScreen1;
+    public TextMeshProUGUI textSplashScreen2;
+    public Image imageSplashScreen2;
+
+    float timeToChangeAlpha = 2.0f;
+    float timeBetweenScreens = 3.0f;
     float timeInScreens = 4.0f;
 
     private void Start()
     {
-        StartCoroutine(ShowSplashScreens());
+        StartCoroutine(ShowAndHide());
     }
-    IEnumerator ShowSplashScreens()
+
+    IEnumerator ShowAndHide()
     {
         yield return new WaitForSeconds(timeBetweenScreens);
-        splashScreen1.SetActive(true);
+
+        float t = 0.0f;
+        Color origColorText = textSplashScreen1.color;
+        Color targetColorText = new Color(origColorText.r, origColorText.g, origColorText.b, 1);
+        Color origColorImage = imageSplashScreen1.color;
+        Color targetColorImage = new Color(origColorImage.r, origColorImage.g, origColorImage.b, 1);
+
+        while (textSplashScreen1.color != targetColorText && imageSplashScreen1.color != targetColorImage)
+        {
+            t += Time.deltaTime / timeToChangeAlpha;
+            textSplashScreen1.color = Color.Lerp(origColorText, targetColorText, t);
+            imageSplashScreen1.color = Color.Lerp(origColorImage, targetColorImage, t);
+            yield return null;
+        }
+        
         yield return new WaitForSeconds(timeInScreens);
-        splashScreen1.SetActive(false);
+
+        t = 0.0f;
+        origColorText = textSplashScreen1.color;
+        targetColorText = new Color(origColorText.r, origColorText.g, origColorText.b, 0);
+        origColorImage = imageSplashScreen1.color;
+        targetColorImage = new Color(origColorImage.r, origColorImage.g, origColorImage.b, 0);
+
+        while (textSplashScreen1.color != targetColorText && imageSplashScreen1.color != targetColorImage)
+        {
+            t += Time.deltaTime / timeToChangeAlpha;
+            textSplashScreen1.color = Color.Lerp(origColorText, targetColorText, t);
+            imageSplashScreen1.color = Color.Lerp(origColorImage, targetColorImage, t);
+
+            yield return null;
+        }
+
         yield return new WaitForSeconds(timeBetweenScreens);
-        splashScreen2.SetActive(true);
+
+        t = 0.0f;
+        origColorText = textSplashScreen2.color;
+        targetColorText = new Color(origColorText.r, origColorText.g, origColorText.b, 1);
+        origColorImage = imageSplashScreen2.color;
+        targetColorImage = new Color(origColorImage.r, origColorImage.g, origColorImage.b, 1);
+
+        while (textSplashScreen2.color != targetColorText && imageSplashScreen2.color != targetColorImage)
+        {
+            t += Time.deltaTime / timeToChangeAlpha;
+            textSplashScreen2.color = Color.Lerp(origColorText, targetColorText, t);
+            imageSplashScreen2.color = Color.Lerp(origColorImage, targetColorImage, t);
+
+            yield return null;
+        }
+
         yield return new WaitForSeconds(timeInScreens);
-        splashScreen2.SetActive(false);
+
+        t = 0.0f;
+        origColorText = textSplashScreen2.color;
+        targetColorText = new Color(origColorText.r, origColorText.g, origColorText.b, 0);
+        origColorImage = imageSplashScreen2.color;
+        targetColorImage = new Color(origColorImage.r, origColorImage.g, origColorImage.b, 0);
+
+        while (textSplashScreen2.color != targetColorText && imageSplashScreen2.color != targetColorImage)
+        {
+            t += Time.deltaTime / timeToChangeAlpha;
+            textSplashScreen2.color = Color.Lerp(origColorText, targetColorText, t);
+            imageSplashScreen2.color = Color.Lerp(origColorImage, targetColorImage, t);
+
+            yield return null;
+        }
+
         yield return new WaitForSeconds(timeBetweenScreens);
         SceneManager.LoadScene(1);
     }
+
 }
